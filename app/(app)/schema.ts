@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
+import { METHODS } from '@/constants/method'
 import { REGIONS } from '@/constants/region'
-import { TAGS } from '@/constants/tag'
 import {
   ARRAY_DELIMITER,
   RANGE_DELIMITER,
@@ -22,45 +22,87 @@ const stringToBoolean = z
   })
   .pipe(z.boolean().optional())
 
-export const columnSchema = z.object({
-  name: z.string(),
-  url: z.string(),
-  p95: z.number().optional(),
-  public: z.boolean(),
-  active: z.boolean(),
-  regions: z.enum(REGIONS).array(),
-  tags: z.enum(TAGS).array(),
-  date: z.date()
+export const timingSchema = z.object({
+  'timing.dns': z.number(),
+  'timing.connection': z.number(),
+  'timing.tls': z.number(),
+  'timing.ttfb': z.number(),
+  'timing.transfer': z.number()
 })
 
-export type ColumnSchema = z.infer<typeof columnSchema>
+export const columnSchema = z
+  .object({
+    uuid: z.string(),
+    method: z.enum(METHODS),
+    host: z.string(),
+    pathname: z.string(),
+    success: z.boolean(),
+    latency: z.number(),
+    status: z.number(),
+    regions: z.enum(REGIONS).array(),
+    date: z.date(),
+    headers: z.record(z.string()),
+    message: z.string().optional(),
+    percentile: z.number().optional()
+  })
+  .merge(timingSchema)
 
+export type ColumnSchema = z.infer<typeof columnSchema>
+export type TimingSchema = z.infer<typeof timingSchema>
+
+// TODO: can we get rid of this in favor of nuqs search-params?
 export const columnFilterSchema = z.object({
-  url: z.string().optional(),
-  p95: z
+  success: z
+    .string()
+    .transform(val => val.split(ARRAY_DELIMITER))
+    .pipe(stringToBoolean.array())
+    .optional(),
+  method: z
+    .string()
+    .transform(val => val.split(ARRAY_DELIMITER))
+    .pipe(z.enum(METHODS).array())
+    .optional(),
+  host: z.string().optional(),
+  pathname: z.string().optional(),
+  latency: z
     .string()
     .transform(val => val.split(SLIDER_DELIMITER))
     .pipe(z.coerce.number().array().max(2))
     .optional(),
-  public: z
+  'timing.dns': z
     .string()
-    .transform(val => val.split(ARRAY_DELIMITER))
-    .pipe(stringToBoolean.array())
+    .transform(val => val.split(SLIDER_DELIMITER))
+    .pipe(z.coerce.number().array().max(2))
     .optional(),
-  active: z
+  'timing.connection': z
+    .string()
+    .transform(val => val.split(SLIDER_DELIMITER))
+    .pipe(z.coerce.number().array().max(2))
+    .optional(),
+  'timing.tls': z
+    .string()
+    .transform(val => val.split(SLIDER_DELIMITER))
+    .pipe(z.coerce.number().array().max(2))
+    .optional(),
+  'timing.ttfb': z
+    .string()
+    .transform(val => val.split(SLIDER_DELIMITER))
+    .pipe(z.coerce.number().array().max(2))
+    .optional(),
+  'timing.transfer': z
+    .string()
+    .transform(val => val.split(SLIDER_DELIMITER))
+    .pipe(z.coerce.number().array().max(2))
+    .optional(),
+  status: z
     .string()
     .transform(val => val.split(ARRAY_DELIMITER))
-    .pipe(stringToBoolean.array())
+    .pipe(z.coerce.number().array())
     .optional(),
   regions: z
     .string()
     .transform(val => val.split(ARRAY_DELIMITER))
     .pipe(z.enum(REGIONS).array())
-    .optional(),
-  tags: z
-    .string()
-    .transform(val => val.split(ARRAY_DELIMITER))
-    .pipe(z.enum(TAGS).array())
     .optional(),
   date: z
     .string()

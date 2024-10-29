@@ -1,31 +1,18 @@
 import * as React from 'react'
 
-import { columns } from '@/app/(app)/columns'
-import { data, filterFields } from '@/app/(app)/constants'
-import { DataTable } from '@/app/(app)/data-table'
+import { Client } from '@/app/(app)/client'
+import { dataOptions } from '@/app/(app)/query-options'
 import { searchParamsCache } from '@/app/(app)/search-params'
-import { Skeleton } from '@/app/(app)/skeleton'
+import { getQueryClient } from '@/components/query/get-query-client'
 
-export default function Page({
-  searchParams
-}: {
+interface PageProps {
   searchParams: { [key: string]: string | string[] | undefined }
-}) {
-  const search = searchParamsCache.parse(searchParams)
+}
 
-  return (
-    <React.Suspense fallback={<Skeleton />}>
-      <DataTable
-        columns={columns}
-        data={data}
-        filterFields={filterFields}
-        defaultColumnFilters={Object.entries(search)
-          .map(([key, value]) => ({
-            id: key,
-            value
-          }))
-          .filter(({ value }) => value ?? undefined)}
-      />
-    </React.Suspense>
-  )
+export default async function Page({ searchParams }: PageProps) {
+  const search = searchParamsCache.parse(searchParams)
+  const queryClient = getQueryClient()
+  await queryClient.prefetchInfiniteQuery(dataOptions(search))
+
+  return <Client />
 }
