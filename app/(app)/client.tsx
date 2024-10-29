@@ -9,6 +9,7 @@ import { filterFields as defaultFilterFields } from '@/app/(app)/constants'
 import { DataTableInfinite } from '@/app/(app)/data-table-infinite'
 import { dataOptions } from '@/app/(app)/query-options'
 import { searchParamsParser } from '@/app/(app)/search-params'
+import { Option } from '@/components/data-table/types'
 
 export function Client() {
   const [search] = useQueryStates(searchParamsParser)
@@ -43,18 +44,24 @@ export function Client() {
           field.value === 'timing.transfer' ||
           field.value === 'status'
         ) {
-          field.options =
-            totalFilters?.[field.value].map((value: string) => ({
+          const options: Option[] =
+            totalFilters?.[field.value]?.map((value: number) => ({
               label: `${value}`,
               value
-            })) ?? field.options
+            })) ??
+            field.options ??
+            []
+          return { ...field, options }
         }
         if (field.value === 'host' || field.value === 'pathname') {
-          field.options =
-            totalFilters?.[field.value].map((value: string) => ({
+          const options: Option[] =
+            totalFilters?.[field.value]?.map((value: string) => ({
               label: `${value}`,
               value
-            })) ?? field.options
+            })) ??
+            field.options ??
+            []
+          return { ...field, options }
         }
         return field
       }),
