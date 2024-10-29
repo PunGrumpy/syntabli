@@ -1,5 +1,6 @@
 'use client'
 
+import { type ColumnSchema } from '@/app/(app)/schema'
 import type {
   DataTableFilterField,
   Option
@@ -8,8 +9,6 @@ import { METHODS } from '@/constants/method'
 import { REGIONS } from '@/constants/region'
 import { getStatusColor } from '@/lib/request/status-code'
 import { cn } from '@/lib/utils'
-
-import { type ColumnSchema } from './schema'
 
 export const filterFields = [
   {
