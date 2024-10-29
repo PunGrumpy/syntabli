@@ -152,8 +152,7 @@ export function DataTableInfinite<TData, TValue>({
       columnOrder
     },
     enableMultiRowSelection: false,
-    // @ts-ignore FIXME: because it is not in the types
-    getRowId: (row, index) => `${row?.uuid}` || `${index}`,
+    getRowId: (row: any) => `${row?.uuid}`,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection,
@@ -200,13 +199,11 @@ export function DataTableInfinite<TData, TValue>({
     )
 
     setSearch(search)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columnFilters])
+  }, [columnFilters, filterFields, setSearch])
 
   React.useEffect(() => {
     setSearch({ sort: sorting?.[0] || null })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sorting])
+  }, [sorting, setSearch])
 
   const selectedRow = React.useMemo(() => {
     const selectedRowKey = Object.keys(rowSelection)?.[0]
@@ -223,44 +220,40 @@ export function DataTableInfinite<TData, TValue>({
     } else {
       setSearch({ uuid: Object.keys(rowSelection)?.[0] || null })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rowSelection, selectedRow])
+  }, [rowSelection, selectedRow, setSearch])
 
   return (
     <>
-      <div className="flex size-full min-h-screen flex-col sm:flex-row">
+      <div className="flex min-h-screen">
         <div
           className={cn(
-            'w-ful h-full sm:sticky sm:top-0 sm:max-h-screen sm:min-w-52 sm:max-w-52 sm:self-start sm:overflow-y-scroll md:min-w-72 md:max-w-72',
+            'sticky top-0 h-screen w-52 shrink-0 overflow-auto border-r border-border md:w-72',
             !controlsOpen && 'hidden'
           )}
         >
-          <div className="flex-1 p-2">
-            <DataTableFilterControls
-              table={table}
-              columns={columns}
-              filterFields={filterFields}
-            />
-          </div>
-          <Separator className="my-2" />
-          <div className="p-2">
-            <SocialsFooter />
+          <div className="flex h-full flex-col">
+            <div className="grow p-2">
+              <DataTableFilterControls
+                table={table}
+                columns={columns}
+                filterFields={filterFields}
+              />
+            </div>
+            <div className="border-t p-2">
+              <SocialsFooter />
+            </div>
           </div>
         </div>
         <div
           className={cn(
-            'flex max-w-full flex-1 flex-col text-clip border-border sm:border-l',
-            // Chrome issue
+            'flex w-full flex-1 flex-col text-clip',
             controlsOpen &&
-              'sm:max-w-[calc(100vw_-_208px)] md:max-w-[calc(100vw_-_288px)]'
+              'sm:max-w-[calc(100vw-13rem)] md:max-w-[calc(100vw-18rem)]'
           )}
         >
           <div
             ref={topBarRef}
-            className={cn(
-              'flex flex-col gap-4 bg-background p-2',
-              'sticky top-0 z-10 pb-4'
-            )}
+            className="sticky top-0 z-10 flex flex-col gap-4 bg-background p-2 pb-4"
           >
             <DataTableFilterCommand
               table={table}
@@ -284,7 +277,7 @@ export function DataTableInfinite<TData, TValue>({
           <div className="z-0">
             <Table containerClassName="overflow-clip">
               <TableHeader
-                className="sticky z-20 bg-muted"
+                className="sticky z-20 bg-muted/50 backdrop-blur-lg"
                 style={{ top: `${topBarHeight}px` }}
               >
                 {table.getHeaderGroups().map(headerGroup => (
@@ -292,23 +285,21 @@ export function DataTableInfinite<TData, TValue>({
                     key={headerGroup.id}
                     className="hover:bg-transparent"
                   >
-                    {headerGroup.headers.map(header => {
-                      return (
-                        <TableHead
-                          key={header.id}
-                          className={
-                            header.column.columnDef.meta?.headerClassName
-                          }
-                        >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      )
-                    })}
+                    {headerGroup.headers.map(header => (
+                      <TableHead
+                        key={header.id}
+                        className={
+                          header.column.columnDef.meta?.headerClassName
+                        }
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
                   </TableRow>
                 ))}
               </TableHeader>
