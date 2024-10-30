@@ -1,13 +1,10 @@
-// app/api/route.ts
 import { addDays } from 'date-fns'
 import { and, between, count, desc, eq, inArray, like, sql } from 'drizzle-orm'
-import { MySqlRawQueryResult } from 'drizzle-orm/mysql2'
 import { NextRequest } from 'next/server'
 
 import { type ColumnSchema } from '@/app/(app)/schema'
 import { searchParamsCache } from '@/app/(app)/search-params'
 import {
-  filterData,
   getPercentileFromData,
   groupChartData,
   percentileData

@@ -1,7 +1,8 @@
 {
-  "name": "data-table-filters",
+  "name": "syntabli",
   "version": "0.1.0",
   "private": true,
+  "description": "Intuitive, fast, and flexible data tables for seamless prototyping and innovation",
   "scripts": {
     "build": "next build",
     "db:generate": "drizzle-kit generate",

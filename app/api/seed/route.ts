@@ -1,5 +1,3 @@
-import { NextRequest } from 'next/server'
-
 import createMockData from '@/app/api/seed/mock'
 import { db } from '@/lib/db'
 import { requests } from '@/lib/db/schema'
