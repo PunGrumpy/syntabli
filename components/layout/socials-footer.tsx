@@ -1,9 +1,8 @@
 import { GithubIcon, Globe02Icon, InstagramIcon } from 'hugeicons-react'
 
+import { Link } from '@/components/custom/link'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { Button } from '@/components/ui/button'
-
-import { Link } from '../custom/link'
 
 export function SocialsFooter() {
   return (
