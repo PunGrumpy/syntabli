@@ -230,11 +230,13 @@ async function getTotalFilters() {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     // Parse search params
     const _search = new Map<string, string>()
-    req.nextUrl.searchParams.forEach((value, key) => _search.set(key, value))
+    request.nextUrl.searchParams.forEach((value, key) =>
+      _search.set(key, value)
+    )
     const search = await searchParamsCache.parse(Object.fromEntries(_search))
 
     // Build filter conditions
@@ -301,6 +303,6 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function HEAD(req: NextRequest) {
-  return GET(req)
+export async function HEAD(request: NextRequest) {
+  return GET(request)
 }
