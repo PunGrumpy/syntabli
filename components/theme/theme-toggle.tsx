@@ -1,6 +1,6 @@
 'use client'
 
-import { Laptop, Moon, Sun } from 'lucide-react'
+import { LaptopIcon, Moon02Icon, Sun03Icon } from 'hugeicons-react'
 import { useTheme } from 'next-themes'
 
 import { Button, ButtonProps } from '@/components/ui/button'
@@ -24,22 +24,22 @@ export function ThemeToggle({ className, ...props }: ButtonProps) {
           className={cn('w-9 px-0', className)}
           {...props}
         >
-          <Sun className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <Sun03Icon className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon02Icon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme('light')}>
-          <Sun className="mr-2 size-4" />
+          <Sun03Icon className="mr-2 size-4" />
           <span>Light</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')}>
-          <Moon className="mr-2 size-4" />
+          <Moon02Icon className="mr-2 size-4" />
           <span>Dark</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('system')}>
-          <Laptop className="mr-2 size-4" />
+          <LaptopIcon className="mr-2 size-4" />
           <span>System</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

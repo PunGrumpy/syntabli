@@ -1,4 +1,4 @@
-import { Github, Globe, Instagram } from 'lucide-react'
+import { GithubIcon, Globe02Icon, InstagramIcon } from 'hugeicons-react'
 
 import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { Button } from '@/components/ui/button'
@@ -12,17 +12,17 @@ export function SocialsFooter() {
         <ThemeToggle className="[&>svg]:size-4" />
         <Button variant="ghost" size="sm" className="w-9 px-0" asChild>
           <Link href="https://github.com/PunGrumpy/syntabli">
-            <Github className="size-4" />
+            <GithubIcon className="size-4" />
           </Link>
         </Button>
         <Button variant="ghost" size="sm" className="w-9 px-0" asChild>
           <Link href="https://instagram.com/pungrumpy_p">
-            <Instagram className="size-4" />
+            <InstagramIcon className="size-4" />
           </Link>
         </Button>
         <Button variant="ghost" size="sm" className="w-9 px-0" asChild>
           <Link href="https://pungrumpy.com">
-            <Globe className="size-4" />
+            <Globe02Icon className="size-4" />
           </Link>
         </Button>
       </div>
