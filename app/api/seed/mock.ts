@@ -27,6 +27,8 @@ function getRandomStatusCode() {
   const rand = Math.random()
   if (rand < 0.9) return 200
   if (rand < 0.94) return 400
+  if (rand < 0.98) return 404
+  if (rand < 0.99) return 429
   return 500
 }
 
